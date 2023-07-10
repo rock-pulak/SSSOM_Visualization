@@ -13,8 +13,6 @@ async function fileLines(fileName) {
   var keys = lines[0].split('\t');
   var masterTable = [];
   for (let y = 1; y < lines.length; y++) {
-	console.log(y);
-	console.log(lines[y]);
 	var data = lines[y].split('\t');
     var entry = {};
 	for (let i = 0; i < keys.length; i++){
@@ -76,4 +74,14 @@ function createCell(r, data, mChar, primary, secondary){
   cell.appendChild(tNode);
 }
 
+
+function unloadDetails(){
+  var table = document.getElementById("DetailTable");
+  table.style.display = "none";
+}
+
+function loadDetails(){
+  var table = document.getElementById("DetailTable");
+  table.style.display = "block";
+}
 fileLines("./ncit_icd10_2017.sssom.tsv");
