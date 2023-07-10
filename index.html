@@ -14,13 +14,12 @@
 		margin:auto;
 	  }
 	  .DetailBG {
+	    background-color: rgba(0,0,0,0.5);
 	    position: fixed;
-		width: 100%
-		height: 100%
+		width: 100%;
+		height: 100%;
 		top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
 	  }
 	  .DetailTable {
 	    background-color: Lime;
@@ -31,7 +30,7 @@
 	</style>
   </head>
   <body>
-	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()"><table class = "DetailTable" id = "DetailTable"></table></div>
+	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()"><table class = "DetailTable" id = "DetailTable"><tr><td>click anywhere to close</td></tr></table></div>
 	<table class = "DataTable" id = "MainTable" onclick = "loadDetails()"></table>
 	<script src="index.js"></script>
   </body>

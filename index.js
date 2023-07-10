@@ -76,12 +76,14 @@ function createCell(r, data, mChar, primary, secondary){
 
 
 function unloadDetails(){
-  var table = document.getElementById("DetailTable");
-  table.style.display = "none";
+  var holder = document.getElementById("DetailTableHolder");
+  holder.style.display = "none";
 }
 
 function loadDetails(){
-  var table = document.getElementById("DetailTable");
-  table.style.display = "block";
+  var holder = document.getElementById("DetailTableHolder");
+  holder.style.display = "block";
 }
+
+
 fileLines("./ncit_icd10_2017.sssom.tsv");
