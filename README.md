@@ -5,3 +5,7 @@ The goal of the project is to host a static webpage into which SSSOM-compliant m
 ## Current features
 - Loading data sheet from specific server-side file
 - Display basic information about individual Subject-Predicate-Object mappings
+
+## Upcoming featuures
+- Display advanced data about specific entries on click
+- Allow users to search and filter by name, ID, etc.
