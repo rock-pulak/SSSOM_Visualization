@@ -1,4 +1,8 @@
+var masterTable;
+
 const columns = ["Subject", "Details", "Object"];
+
+
 
 
 async function fileLines(fileName) {
@@ -11,7 +15,7 @@ async function fileLines(fileName) {
   
   //Generate the data table
   var keys = lines[0].split('\t');
-  var masterTable = [];
+  masterTable = [];
   for (let y = 1; y < lines.length; y++) {
 	var data = lines[y].split('\t');
     var entry = {};
@@ -44,6 +48,7 @@ function checkComment(line){
 
 function createRow(p, index, data){
   var row = p.insertRow(index);
+  row.setAttribute("onclick", "loadDetails(" + index + ")");
   createCell(row, data, 45, "subject_label", "subject_id");
   createCell(row, data, 30, null, "predicate_id");
   createCell(row, data, 45, "object_label", "object_id");
@@ -75,15 +80,29 @@ function createCell(r, data, mChar, primary, secondary){
 }
 
 
+var pageData = fileLines("./ncit_icd10_2017.sssom.tsv");
+
+
 function unloadDetails(){
+  var table = document.getElementById("DetailTable");
+  table.innerHTML = "";
   var holder = document.getElementById("DetailTableHolder");
   holder.style.display = "none";
 }
 
-function loadDetails(){
+function loadDetails(index){
+  var table = document.getElementById("DetailTable");
+  var keys = Object.keys(masterTable[index]);
+  for (let i = 0; i < keys.length; i++){
+    var row = table.insertRow(i);
+	var left = row.insertCell();
+	var leftText = document.createTextNode(keys[i]);
+	left.appendChild(leftText);
+	var right = row.insertCell();
+	var rightText = document.createTextNode(masterTable[index][keys[i]]);
+	right.appendChild(rightText);
+  }
+  console.log(masterTable[index]);
   var holder = document.getElementById("DetailTableHolder");
   holder.style.display = "block";
 }
-
-
-fileLines("./ncit_icd10_2017.sssom.tsv");

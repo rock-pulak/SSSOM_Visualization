@@ -30,8 +30,11 @@
 	</style>
   </head>
   <body>
-	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()"><table class = "DetailTable" id = "DetailTable"><tr><td>click anywhere to close</td></tr></table></div>
-	<table class = "DataTable" id = "MainTable" onclick = "loadDetails()"></table>
+	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()" style="display: none">
+	  <table class = "DetailTable" id = "DetailTable">
+	  </table>
+	</div>
+	<table class = "DataTable" id = "MainTable"></table>
 	<script src="index.js"></script>
   </body>
 </html>
