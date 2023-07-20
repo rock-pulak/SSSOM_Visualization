@@ -1,42 +1,5 @@
-	var masterData;
-
+var masterData;
 const columns = ["Subject", "Details", "Object"];
-
-async function fileLines(fileName) {
-  const response = await fetch(fileName);
-  const responseText = await response.text();
-
-  //Not sure of a better way to filter comments.
-  //This works perfectly well for all the data I've seen thusfar
-  var lines = responseText.split('\n').filter(checkComment);
-  
-  //Generate the data table
-  var keys = lines[0].split('\t');
-  masterData = [];
-  for (let y = 1; y < lines.length; y++) {
-	var data = lines[y].split('\t');
-    var entry = {};
-	for (let i = 0; i < keys.length; i++){
-		entry[keys[i]] = data[i];
-	}
-	masterData[y-1] = entry;
-  }
-  
-  //Create table heade
-  var table = document.getElementById("MainTable");
-  var header = table.createTHead();
-  var row = header.insertRow(0);
-  for (let i = 0; i < columns.length; i++){
-	var cell = row.insertCell();
-	var tNode = document.createTextNode(columns[i]);
-	cell.appendChild(tNode);
-  }
-  
-  var body = table.createTBody();
-  for (let y = 0; y < masterData.length; y++) {
-	createRow(body, y, masterData[y]);
-  }
-}
 
 async function fileLinesComplex(fileName){
   const response = await fetch(fileName);
@@ -44,22 +7,22 @@ async function fileLinesComplex(fileName){
 
   //Not sure of a better way to filter comments.
   //This works perfectly well for all the data I've seen thusfar
-  var lines = responseText.split('\n').filter(checkComment);
+  var lines = d3.tsvParse(removeComments(responseText));
   
-  var keys = lines[0].split('\t');
+  var keys = lines["columns"];
   var masterData = {}
-  for (let y = 1; y < lines.length; y++) {
-	var dataEntry = lines[y].split('\t');
+  for (let y = 0; y < lines.length; y++) {
+	var dataEntry = lines[y];
 	var id = null, label = null, entry = {};
 	for (let i = 0; i < keys.length; i++){
 	  if (keys[i] == "subject_id"){
-	    id = dataEntry[i];
+	    id = dataEntry[keys[i]];
 	  }
 	  else if (keys[i] == "subject_label"){
-		label = dataEntry[i];
+		label = dataEntry[keys[i]];
 	  }
 	  else{
-	    entry[keys[i]] = dataEntry[i];
+	    entry[keys[i]] = dataEntry[keys[i]];
 	  }
 	}
 	if (masterData[id] == null){
@@ -85,6 +48,15 @@ async function fileLinesComplex(fileName){
   for (let y = 0; y < idList.length; y++) {
 	createRowComplex(body, y, masterData[idList[y]]);
   }
+}
+
+function removeComments(tsv){
+    var returnText = "";
+    var lines = tsv.split('\n').filter(checkComment);
+	for (let i = 0; i < lines.length; i++){
+	    returnText += lines[i] + '\n';
+	}
+    return returnText;
 }
 
 function checkComment(line){
@@ -165,11 +137,7 @@ function createCellComplex(r, data, mChar, primary, secondary){
 
 }
 
-//fileLines("./ncit_icd10_2016.sssom.tsv");
-//fileLines("./ncit_icd10_2017.sssom.tsv");
-//fileLines("./ordo.sssom.tsv");
 fileLinesComplex("./ncit_icd10_2017.sssom.tsv");
-
 
 function unloadDetails(){
   var table = document.getElementById("DetailTable");
