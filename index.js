@@ -1,4 +1,4 @@
-var masterData;
+	var masterData;
 
 const columns = ["Subject", "Details", "Object"];
 
@@ -168,7 +168,7 @@ function createCellComplex(r, data, mChar, primary, secondary){
 //fileLines("./ncit_icd10_2016.sssom.tsv");
 //fileLines("./ncit_icd10_2017.sssom.tsv");
 //fileLines("./ordo.sssom.tsv");
-//fileLinesComplex("./ordo.sssom.tsv");
+fileLinesComplex("./ncit_icd10_2017.sssom.tsv");
 
 
 function unloadDetails(){

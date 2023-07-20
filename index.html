@@ -8,7 +8,7 @@
 		padding: 0px 4px 0px;
 	  }
 	  .DataTable {
-	    background-color: DodgerBlue;
+	    background-color: rgba(223, 223, 223, 1.0);
 		padding: 4px;
 		border-radius: 4px;
 		margin:auto;
@@ -22,7 +22,7 @@
         left: 0;
 	  }
 	  .DetailTable {
-	    background-color: Lime;
+	    background-color: rgba(223, 223, 255, 1.0);
 		padding: 4px;
 		border-radius: 4px;
 		margin:auto;
@@ -30,11 +30,15 @@
 	</style>
   </head>
   <body>
+	<div class = "DetailBG" id = "DragAndDrop" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)" style="display: none">
+	</div>
 	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()" style="display: none">
 	  <table class = "DetailTable" id = "DetailTable">
 	  </table>
 	</div>
 	<table class = "DataTable" id = "MainTable"></table>
+	<script src="jquery-3.7.0.js"></script>
+	<script src="d3_dsv/index.js"></script>
 	<script src="index.js"></script>
   </body>
 </html>
