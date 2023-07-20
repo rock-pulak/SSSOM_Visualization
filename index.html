@@ -21,22 +21,34 @@
 		top: 0;
         left: 0;
 	  }
+	  .FileInput {
+	    background-color: rgba(223, 255, 223, 1.0);
+		padding: 4px;
+		border-radius: 4px;
+		margin:auto;
+		width:20%;
+	  }
 	  .DetailTable {
 	    background-color: rgba(223, 223, 255, 1.0);
 		padding: 4px;
 		border-radius: 4px;
 		margin:auto;
+		width:20%;
 	  }
 	</style>
   </head>
   <body>
-	<div class = "DetailBG" id = "DragAndDrop" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)" style="display: none">
+	<div class = "DetailBG" id = "DragAndDrop" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)" style="display: block">
+	  <div class = "FileInput">
+	    <button type="button" onclick = "loadFile('./ncit_icd10_2017.sssom.tsv')">Load sample data</button></br>
+		Custom data sheet loading to be added
+	  </div>
 	</div>
 	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()" style="display: none">
 	  <table class = "DetailTable" id = "DetailTable">
 	  </table>
 	</div>
-	<script src='https://d3js.org/d3.v4.min.js'></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	<table class = "DataTable" id = "MainTable"></table>
 	<script src="index.js"></script>

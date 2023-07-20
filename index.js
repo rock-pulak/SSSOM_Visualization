@@ -1,53 +1,58 @@
 var masterData;
 const columns = ["Subject", "Details", "Object"];
 
-async function fileLinesComplex(fileName){
-  const response = await fetch(fileName);
-  const responseText = await response.text();
+function loadFile(fileName){
+	var fileWindow = document.getElementById("DragAndDrop");
+	fileWindow.style.display = "none";
+	fileLinesComplex(fileName);
+}
 
-  //Not sure of a better way to filter comments.
-  //This works perfectly well for all the data I've seen thusfar
-  var lines = d3.tsvParse(removeComments(responseText));
+async function fileLinesComplex(fileName){
+	const response = await fetch(fileName);
+	const responseText = await response.text();
+
+	//Not sure of a better way to filter comments.
+	//This works perfectly well for all the data I've seen thusfar
+	var lines = d3.tsvParse(removeComments(responseText));
   
-  var keys = lines["columns"];
-  var masterData = {}
-  for (let y = 0; y < lines.length; y++) {
-	var dataEntry = lines[y];
-	var id = null, label = null, entry = {};
-	for (let i = 0; i < keys.length; i++){
-	  if (keys[i] == "subject_id"){
-	    id = dataEntry[keys[i]];
-	  }
-	  else if (keys[i] == "subject_label"){
-		label = dataEntry[keys[i]];
-	  }
-	  else{
-	    entry[keys[i]] = dataEntry[keys[i]];
-	  }
+	var keys = lines["columns"];
+	var masterData = {}
+	for (let y = 0; y < lines.length; y++) {
+		var dataEntry = lines[y];
+		var id = null, label = null, entry = {};
+		for (let i = 0; i < keys.length; i++){
+			if (keys[i] == "subject_id"){
+				id = dataEntry[keys[i]];
+			}
+			else if (keys[i] == "subject_label"){
+				label = dataEntry[keys[i]];
+			}
+			else{
+				entry[keys[i]] = dataEntry[keys[i]];
+			}
+		}
+		if (masterData[id] == null){
+			masterData[id] = {"subject_id": id, "subject_label": label, "children":[entry]};
+		}
+		else {
+			masterData[id]["children"].push(entry);
+		}
 	}
-	if (masterData[id] == null){
-	  masterData[id] = {"subject_id": id, "subject_label": label, "children":[entry]};
+  
+	var table = document.getElementById("MainTable");
+	var header = table.createTHead();
+	var row = header.insertRow(0);
+	for (let i = 0; i < columns.length; i++){
+		var cell = row.insertCell();
+		var tNode = document.createTextNode(columns[i]);
+		cell.appendChild(tNode);
 	}
-	else {
-	  masterData[id]["children"].push(entry);
+	
+	var body = table.createTBody();
+	var idList = Object.keys(masterData);
+	for (let y = 0; y < idList.length; y++) {
+		createRowComplex(body, y, masterData[idList[y]]);
 	}
-  }
-  
-  var table = document.getElementById("MainTable");
-  var header = table.createTHead();
-  var row = header.insertRow(0);
-  for (let i = 0; i < columns.length; i++){
-	var cell = row.insertCell();
-	var tNode = document.createTextNode(columns[i]);
-	cell.appendChild(tNode);
-  }
-  
-  
-  var body = table.createTBody();
-  var idList = Object.keys(masterData);
-  for (let y = 0; y < idList.length; y++) {
-	createRowComplex(body, y, masterData[idList[y]]);
-  }
 }
 
 function removeComments(tsv){
@@ -60,17 +65,9 @@ function removeComments(tsv){
 }
 
 function checkComment(line){
-  //This seems to be the standard for comments.
-  //If other comment types show up this will be changed
-  return line[0] != '#' && line.length != 0;
-}
-
-function createRow(p, index, data){
-  var row = p.insertRow(index);
-  row.setAttribute("onclick", "loadDetails(" + index + ")");
-  createCell(row, data, 0, "subject_label", "subject_id");
-  createCell(row, data, 30, null, "predicate_id");
-  createCell(row, data, 45, "object_label", "object_id");
+	//This seems to be the standard for comments.
+	//If other comment types show up this will be changed
+	return line[0] != '#' && line.length != 0;
 }
 
 function createRowComplex(p, index, data){
@@ -136,8 +133,6 @@ function createCellComplex(r, data, mChar, primary, secondary){
   }
 
 }
-
-fileLinesComplex("./ncit_icd10_2017.sssom.tsv");
 
 function unloadDetails(){
   var table = document.getElementById("DetailTable");
