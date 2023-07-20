@@ -14,3 +14,6 @@ The goal of the project is to host a static webpage into which SSSOM-compliant m
 - Load document at runtime
 - Allow users to expand full text of entries or hide text for more compact viewing
 - Allow users to search and filter by name, ID, etc.
+
+##Notes
+- ncit_icd10_2017.sssom.tsv provided courtesy of the mapping commons: https://github.com/mapping-commons/disease-mappings/tree/main/mappings
