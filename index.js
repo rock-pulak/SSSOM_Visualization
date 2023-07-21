@@ -2,8 +2,7 @@ var masterData;
 const columns = ["Subject", "Details", "Object"];
 
 function loadFile(fileName){
-	var fileWindow = document.getElementById("DragAndDrop");
-	fileWindow.style.display = "none";
+	unloadFileMenu();
 	fileLinesComplex(fileName);
 }
 
@@ -38,7 +37,9 @@ async function fileLinesComplex(fileName){
 			masterData[id]["children"].push(entry);
 		}
 	}
-  
+	
+	clearTable();
+	
 	var table = document.getElementById("MainTable");
 	var header = table.createTHead();
 	var row = header.insertRow(0);
@@ -52,6 +53,18 @@ async function fileLinesComplex(fileName){
 	var idList = Object.keys(masterData);
 	for (let y = 0; y < idList.length; y++) {
 		createRowComplex(body, y, masterData[idList[y]]);
+	}
+}
+
+function clearTable(){
+	var table = document.getElementById("MainTable");
+	const head = table.getElementsByTagName("thead");
+	for (i = 0; i < head.length; i++){
+		head[i].remove();
+	}
+	const body = table.getElementsByTagName("UL");
+	for (i = 0; i < body.length; i++){
+		body[i].remove();
 	}
 }
 
@@ -132,6 +145,16 @@ function createCellComplex(r, data, mChar, primary, secondary){
   cell.appendChild(tNode);
   }
 
+}
+
+function unloadFileMenu(){
+	var fileWindow = document.getElementById("DragAndDrop");
+	fileWindow.style.display = "none";
+}
+
+function loadFileMenu(){
+	var fileWindow = document.getElementById("DragAndDrop");
+	fileWindow.style.display = "block";
 }
 
 function unloadDetails(){
