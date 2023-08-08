@@ -76,7 +76,7 @@ function clearTable(){
 	for (i = 0; i < head.length; i++){
 		head[i].remove();
 	}
-	const body = table.getElementsByTagName("UL");
+	const body = table.getElementsByTagName("tbody");
 	for (i = 0; i < body.length; i++){
 		body[i].remove();
 	}
