@@ -1,18 +1,32 @@
 var masterData;
 const columns = ["Subject", "Details", "Object"];
 
-function loadFile(fileName){
+function recieveFile(e){
+	e.preventDefault();
 	unloadFileMenu();
-	fileLinesComplex(fileName);
+	var file = e.dataTransfer.files[0];
+	var reader = new FileReader();
+    reader.onload = (evt) => {
+        getLines(evt.target.result);
+    };
+	reader.readAsText(file);
 }
 
-async function fileLinesComplex(fileName){
+function loadFile(fileName){
+	unloadFileMenu();
+	getFileLocal(fileName);
+}
+
+async function getFileLocal(){
 	const response = await fetch(fileName);
 	const responseText = await response.text();
+	getLines(responseText);
+}
 
+async function getLines(fileText){
 	//Not sure of a better way to filter comments.
 	//This works perfectly well for all the data I've seen thusfar
-	var lines = d3.tsvParse(removeComments(responseText));
+	var lines = d3.tsvParse(removeComments(fileText));
   
 	var keys = lines["columns"];
 	var masterData = {}
