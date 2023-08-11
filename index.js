@@ -17,7 +17,7 @@ function loadFile(fileName){
 	getFileLocal(fileName);
 }
 
-async function getFileLocal(){
+async function getFileLocal(fileName){
 	const response = await fetch(fileName);
 	const responseText = await response.text();
 	getLines(responseText);
@@ -98,67 +98,54 @@ function checkComment(line){
 }
 
 function createRowComplex(p, index, data){
-  var row = p.insertRow(index);
-  //row.setAttribute("onclick", "loadDetails(" + index + ")");
-  createCell(row, data, 0, "subject_label", "subject_id");
-  createCellComplex(row, data, 0, null, "predicate_id");
-  createCellComplex(row, data, 0, "object_label", "object_id");
+    var row = p.insertRow(index);
+    //row.setAttribute("onclick", "loadDetails(" + index + ")");
+    createCell(row, data, "subject_label", "subject_id");
+    createCellComplex(row, data, 0, null, "predicate_id");
+    createCellComplex(row, data, 0, "object_label", "object_id");
 }
 
-function createCell(r, data, mChar, primary, secondary){
-  var cell = r.insertCell();
-  var tText;
-  if (data.hasOwnProperty(primary)){
-	if (data.hasOwnProperty(secondary)){
-	  cell.setAttribute("title", data[secondary]);
-	}
-	if (data[primary].length > mChar)
-	  tText = mChar > 0 ? data[primary].slice(0, mChar) + "..." : data[primary];
-    else
-	  tText = data[primary];
-  }
-  else if (data.hasOwnProperty(secondary)) {
-	if (data[secondary].length > mChar)
-	  tText = data[secondary].slice(0, mChar) + "...";
-    else
-	  tText = data[secondary];
-  }
-  else {
-	tText = "Data not available";
-  }
-  var tNode = document.createTextNode(tText);
-  cell.appendChild(tNode);
+function createCell(r, data, primary, secondary){
+    var cell = r.insertCell();
+    var tText;
+    if (data.hasOwnProperty(primary)){
+	    if (data.hasOwnProperty(secondary)){
+	        cell.setAttribute("title", data[secondary]);
+	    }
+	    tText = data[primary];
+    }
+    else if (data.hasOwnProperty(secondary)) {
+	    tText = data[secondary];
+    }
+    else {
+	    tText = "Data not available";
+    }
+    var tNode = document.createTextNode(tText);
+    cell.appendChild(tNode);
 }
 
 function createCellComplex(r, data, mChar, primary, secondary){
-  var container = r.insertCell();
-  for (var i = 0; i < data["children"].length; i++){
-	var cell = document.createElement( 'div' );
-	container.appendChild(cell);
-	//var cell = cr.insertCell(i);
-	var localData = data["children"][i];
-    if (localData.hasOwnProperty(primary)){
-	  if (localData.hasOwnProperty(secondary)){
-	    cell.setAttribute("title", localData[secondary]);
-	  }
-	  if (localData[primary].length > mChar)
-	    tText = mChar > 0 ? localData[primary].slice(0, mChar) + "..." : localData[primary];
-      else
-	    tText = localData[primary];
+    var container = r.insertCell();
+    for (var i = 0; i < data["children"].length; i++){
+	    var cell = document.createElement( 'div' );
+	    container.appendChild(cell);
+	    //var cell = cr.insertCell(i);
+	    var localData = data["children"][i];
+        if (localData.hasOwnProperty(primary)){
+	        if (localData.hasOwnProperty(secondary)){
+	            cell.setAttribute("title", localData[secondary]);
+	        }
+	        tText = localData[primary];
+        }
+        else if (localData.hasOwnProperty(secondary)) {
+	        tText = localData[secondary];
+        }
+        else {
+	        tText = "Data not available";
+        }
+        var tNode = document.createTextNode(tText);
+        cell.appendChild(tNode);
     }
-    else if (localData.hasOwnProperty(secondary)) {
-	  if (localData[secondary].length > mChar)
-	    tText = mChar > 0 ? localData[secondary].slice(0, mChar) + "..." : localData[secondary];
-      else
-	    tText = localData[secondary];
-    }
-    else {
-	  tText = "Data not available";
-    }
-  var tNode = document.createTextNode(tText);
-  cell.appendChild(tNode);
-  }
-
 }
 
 function unloadFileMenu(){
