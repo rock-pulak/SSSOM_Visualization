@@ -3,13 +3,15 @@ const columns = ["Subject", "Details", "Object"];
 
 function recieveFile(e){
 	e.preventDefault();
-	unloadFileMenu();
 	var file = e.dataTransfer.files[0];
-	var reader = new FileReader();
-    reader.onload = (evt) => {
-        getLines(evt.target.result);
-    };
-	reader.readAsText(file);
+	if(file.name.slice(-4) == ".tsv"){
+		unloadFileMenu();
+		var reader = new FileReader();
+		reader.onload = (evt) => {
+			getLines(evt.target.result);
+		};
+		reader.readAsText(file);
+	}
 }
 
 function loadFile(fileName){
