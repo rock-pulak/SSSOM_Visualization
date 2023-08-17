@@ -26,7 +26,9 @@
 		padding: 4px;
 		border-radius: 4px;
 		margin:auto;
-		width:20%;
+		margin-top:240px;
+		width:480px;
+		height:360px;
 	  }
 	  .DetailTable {
 	    background-color: rgba(223, 223, 255, 1.0);
@@ -38,10 +40,11 @@
 	</style>
   </head>
   <body>
-	<div class = "DetailBG" id = "DragAndDrop" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)" style="display: block">
-	  <div class = "FileInput">
+	<div class = "DetailBG" id = "DragAndDrop" style="display: block">
+	  <div class = "FileInput" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)">
 	    <button type="button" onclick = "loadFile('./ncit_icd10_2017.sssom.tsv')">Load sample data</button></br>
-		Custom data sheet loading to be added
+		Drag and drop a file here to Load.
+		Only valid .tsv files containing ontology mappings can be loaded
 	  </div>
 	</div>
 	<div class = "DetailBG" id = "DetailTableHolder" onclick = "unloadDetails()" style="display: none">
