@@ -1,0 +1,11 @@
+id	replacement
+owl:sameAs	Same as
+owl:equivalentClass	Equivalent Class
+owl:equivalentProperty	Equivalent Property
+rdfs:subClassOf	Subclass of
+rdfs:subPropertyOf	Subproperty of
+skos:relatedMatch	Related
+skos:closeMatch	Close match
+skos:exactMatch	Exact match
+skos:narrowMatch	Narrow match
+skos:broadMatch	Broad match
