@@ -1,0 +1,11 @@
+id	rank
+owl:sameAs	0
+skos:exactMatch	1
+owl:equivalentClass	2
+owl:equivalentProperty	3
+rdfs:subClassOf	4
+rdfs:subPropertyOf	5
+skos:closeMatch	6
+skos:narrowMatch	7
+skos:broadMatch	8
+skos:relatedMatch	9
