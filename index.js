@@ -14,12 +14,8 @@ function recieveFile(e){
 	}
 }
 
-function loadFile(fileName){
+async function getServerFile(fileName){
 	unloadFileMenu();
-	getFileLocal(fileName);
-}
-
-async function getFileLocal(fileName){
 	const response = await fetch(fileName);
 	const responseText = await response.text();
 	getLines(responseText);
@@ -67,8 +63,10 @@ async function getLines(fileText){
 	
 	var body = table.createTBody();
 	var idList = Object.keys(masterData);
+	var cRow = 0;
 	for (let y = 0; y < idList.length; y++) {
-		createRowComplex(body, y, masterData[idList[y]]);
+		createEntry(body, cRow, masterData[idList[y]]);
+		cRow += masterData[idList[y]]["children"].length;
 	}
 }
 
@@ -99,31 +97,60 @@ function checkComment(line){
 	return line[0] != '#' && line.length != 0;
 }
 
-function createRowComplex(p, index, data){
+function createEntry(p, index, data){
     var row = p.insertRow(index);
-    //row.setAttribute("onclick", "loadDetails(" + index + ")");
-    createCell(row, data, "subject_label", "subject_id");
-    createCellComplex(row, data, 0, null, "predicate_id");
-    createCellComplex(row, data, 0, "object_label", "object_id");
+	createSubjectCell(row, data);
+	for (var y = 0; y < data["children"].length; y++){
+		if (y > 0){
+			row = p.insertRow(y+index);
+		}
+		createObjectRow(row, y, data);
+	}
 }
 
-function createCell(r, data, primary, secondary){
+function createSubjectCell(r, data){
     var cell = r.insertCell();
     var tText;
-    if (data.hasOwnProperty(primary)){
-	    if (data.hasOwnProperty(secondary)){
-	        cell.setAttribute("title", data[secondary]);
+	cell.setAttribute("rowspan", data["children"].length);
+    if (data.hasOwnProperty("subject_label")){
+	    if (data.hasOwnProperty("subject_id")){
+	        cell.setAttribute("title", data["subject_id"]);
 	    }
-	    tText = data[primary];
+	    tText = data["subject_label"];
     }
-    else if (data.hasOwnProperty(secondary)) {
-	    tText = data[secondary];
+    else if (data.hasOwnProperty("subject_id")) {
+	    tText = data["subject_id"];
     }
     else {
 	    tText = "Data not available";
     }
     var tNode = document.createTextNode(tText);
     cell.appendChild(tNode);
+}
+
+function createObjectRow(r, i, data){
+	var child = data["children"][i];
+	
+    var predCell = r.insertCell();
+	var predText = child["predicate_id"];
+	//predCell.setAttribute("onclick", "loadDetails(" + index + ")");
+	predCell.append(predText);
+	
+	var objCell = r.insertCell();
+	var objText;
+    if (child.hasOwnProperty("object_label")){
+	    if (child.hasOwnProperty("object_id")){
+	        cell.setAttribute("title", child["object_id"]);
+	    }
+	    tText = child["object_label"];
+    }
+    else if (child.hasOwnProperty("object_id")) {
+	    objText = child["object_id"];
+    }
+    else {
+	    objText = "Data not available";
+    }
+	objCell.append(objText);
 }
 
 function createCellComplex(r, data, mChar, primary, secondary){
