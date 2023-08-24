@@ -4,7 +4,7 @@
     <title>SSSOM Visualizaion</title>
 	<style>
       th, td {
-	    border: 1px solid;
+	    border-bottom: 1px solid;
 		padding: 0px 4px 0px;
 	  }
 	  .DataTable {
@@ -39,7 +39,7 @@
 	  }
 	</style>
   </head>
-  <body>
+  <body onload="getRanks()">
 	<div class = "DetailBG" id = "DragAndDrop" style="display: block">
 	  <div class = "FileInput" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)">
 	    <button type="button" onclick = "getServerFile('./ncit_icd10_2017.sssom.tsv')">Load sample data</button></br>

@@ -1,4 +1,5 @@
 var masterData;
+var rankTypes;
 const columns = ["Subject", "Details", "Object"];
 
 function recieveFile(e){
@@ -21,11 +22,22 @@ async function getServerFile(fileName){
 	getLines(responseText);
 }
 
+async function getRanks(){
+	const response = await fetch("rankTypes.tsv");
+	const responseText = await response.text();
+	var lines = d3.tsvParse(removeComments(responseText));
+	rankTypes = {};
+	for (var i = 0; i < lines.length; i++){
+		rankTypes[lines[i]["id"]] = lines[i]["rank"];
+	}
+	console.log(rankTypes);
+}
+
 async function getLines(fileText){
 	//Not sure of a better way to filter comments.
 	//This works perfectly well for all the data I've seen thusfar
 	var lines = d3.tsvParse(removeComments(fileText));
-  
+	
 	var keys = lines["columns"];
 	var masterData = {}
 	for (let y = 0; y < lines.length; y++) {
@@ -50,6 +62,25 @@ async function getLines(fileText){
 		}
 	}
 	
+	var idList = Object.keys(masterData);
+	
+	for (let y = 0; y < idList.length; y++) {
+		masterData[idList[y]]["children"].sort(function(a,b){
+			var pA = a["predicate_id"];
+			var pB = b["predicate_id"];
+			if(pA in rankTypes && pB in rankTypes){
+				return rankTypes[pA] - rankTypes[pB]
+			}
+			else if (pA in rankTypes){
+				return -1;
+			}
+			else if (pB in rankTypes){
+				return 1;
+			}
+			else return 0;
+		});
+	}
+	
 	clearTable();
 	
 	var table = document.getElementById("MainTable");
@@ -62,7 +93,6 @@ async function getLines(fileText){
 	}
 	
 	var body = table.createTBody();
-	var idList = Object.keys(masterData);
 	var cRow = 0;
 	for (let y = 0; y < idList.length; y++) {
 		createEntry(body, cRow, masterData[idList[y]]);
@@ -107,11 +137,12 @@ function createEntry(p, index, data){
 		createObjectRow(row, y, data);
 	}
 }
-
 function createSubjectCell(r, data){
     var cell = r.insertCell();
     var tText;
-	cell.setAttribute("rowspan", data["children"].length);
+	if (data["children"].length > 1){
+		cell.setAttribute("rowspan", data["children"].length);
+	}
     if (data.hasOwnProperty("subject_label")){
 	    if (data.hasOwnProperty("subject_id")){
 	        cell.setAttribute("title", data["subject_id"]);
