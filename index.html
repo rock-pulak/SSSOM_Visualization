@@ -39,7 +39,7 @@
 	  }
 	</style>
   </head>
-  <body onload="getRanks()">
+  <body onload="init()">
 	<div class = "DetailBG" id = "DragAndDrop" style="display: block">
 	  <div class = "FileInput" ondragover = "event.preventDefault();" ondrop = "recieveFile(event)">
 	    <button type="button" onclick = "getServerFile('./ncit_icd10_2017.sssom.tsv')">Load sample data</button></br>

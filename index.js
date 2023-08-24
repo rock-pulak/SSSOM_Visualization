@@ -1,6 +1,33 @@
 var masterData;
 var rankTypes;
+var replacementStrings;
 const columns = ["Subject", "Details", "Object"];
+
+async function init(){
+	await getRanks();
+	await getReplacementStrings();
+}
+
+async function getRanks(){
+	const response = await fetch("rankTypes.tsv");
+	const responseText = await response.text();
+	var lines = d3.tsvParse(removeComments(responseText));
+	rankTypes = {};
+	for (var i = 0; i < lines.length; i++){
+		rankTypes[lines[i]["id"]] = lines[i]["rank"];
+	}
+}
+
+async function getReplacementStrings(){
+	const response = await fetch("commonReplacements.tsv");
+	const responseText = await response.text();
+	var lines = d3.tsvParse(removeComments(responseText));
+	replacementStrings = {};
+	for (var i = 0; i < lines.length; i++){
+		replacementStrings[lines[i]["id"]] = lines[i]["replacement"];
+	}
+	//console.log("replacementStrings");
+}
 
 function recieveFile(e){
 	e.preventDefault();
@@ -20,17 +47,6 @@ async function getServerFile(fileName){
 	const response = await fetch(fileName);
 	const responseText = await response.text();
 	getLines(responseText);
-}
-
-async function getRanks(){
-	const response = await fetch("rankTypes.tsv");
-	const responseText = await response.text();
-	var lines = d3.tsvParse(removeComments(responseText));
-	rankTypes = {};
-	for (var i = 0; i < lines.length; i++){
-		rankTypes[lines[i]["id"]] = lines[i]["rank"];
-	}
-	console.log(rankTypes);
 }
 
 async function getLines(fileText){
@@ -163,7 +179,7 @@ function createObjectRow(r, i, data){
 	var child = data["children"][i];
 	
     var predCell = r.insertCell();
-	var predText = child["predicate_id"];
+	var predText = replaceText(child["predicate_id"]);
 	//predCell.setAttribute("onclick", "loadDetails(" + index + ")");
 	predCell.append(predText);
 	
@@ -240,4 +256,8 @@ function loadDetails(index){
   console.log(masterData[index]);
   var holder = document.getElementById("DetailTableHolder");
   holder.style.display = "block";
+}
+
+function replaceText(str){
+	return (str in replacementStrings) ? replacementStrings[str] : str;
 }
