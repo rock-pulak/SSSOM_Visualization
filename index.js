@@ -78,7 +78,11 @@ async function getLines(fileText){
 		}
 	}
 	
-	var idList = Object.keys(masterData);
+	var idList = Object.keys(masterData).sort(function(a,b){
+		var pA = masterData[a]["subject_label"];
+		var pB = masterData[b]["subject_label"];
+		return pA > pB;
+	});
 	
 	for (let y = 0; y < idList.length; y++) {
 		masterData[idList[y]]["children"].sort(function(a,b){
