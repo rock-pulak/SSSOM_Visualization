@@ -55,7 +55,7 @@ async function getLines(fileText){
 	var lines = d3.tsvParse(removeComments(fileText));
 	
 	var keys = lines["columns"];
-	var masterData = {}
+	masterData = {}
 	for (let y = 0; y < lines.length; y++) {
 		var dataEntry = lines[y];
 		var id = null, label = null, entry = {};
@@ -153,6 +153,7 @@ function createEntry(p, index, data){
 		createObjectRow(row, y, data);
 	}
 }
+
 function createSubjectCell(r, data){
     var cell = r.insertCell();
     var tText;
@@ -180,7 +181,7 @@ function createObjectRow(r, i, data){
 	
     var predCell = r.insertCell();
 	var predText = replaceText(child["predicate_id"]);
-	//predCell.setAttribute("onclick", "loadDetails(" + index + ")");
+	predCell.setAttribute("onclick", "loadDetails(\"" + data["subject_id"] + "\", " + i + ")");
 	predCell.append(predText);
 	
 	var objCell = r.insertCell();
@@ -200,30 +201,6 @@ function createObjectRow(r, i, data){
 	objCell.append(objText);
 }
 
-function createCellComplex(r, data, mChar, primary, secondary){
-    var container = r.insertCell();
-    for (var i = 0; i < data["children"].length; i++){
-	    var cell = document.createElement( 'div' );
-	    container.appendChild(cell);
-	    //var cell = cr.insertCell(i);
-	    var localData = data["children"][i];
-        if (localData.hasOwnProperty(primary)){
-	        if (localData.hasOwnProperty(secondary)){
-	            cell.setAttribute("title", localData[secondary]);
-	        }
-	        tText = localData[primary];
-        }
-        else if (localData.hasOwnProperty(secondary)) {
-	        tText = localData[secondary];
-        }
-        else {
-	        tText = "Data not available";
-        }
-        var tNode = document.createTextNode(tText);
-        cell.appendChild(tNode);
-    }
-}
-
 function unloadFileMenu(){
 	var fileWindow = document.getElementById("DragAndDrop");
 	fileWindow.style.display = "none";
@@ -241,21 +218,34 @@ function unloadDetails(){
   holder.style.display = "none";
 }
 
-function loadDetails(index){
-  var table = document.getElementById("DetailTable");
-  var keys = Object.keys(masterData[index]);
-  for (let i = 0; i < keys.length; i++){
-    var row = table.insertRow(i);
-	var left = row.insertCell();
-	var leftText = document.createTextNode(keys[i]);
-	left.appendChild(leftText);
-	var right = row.insertCell();
-	var rightText = document.createTextNode(masterData[index][keys[i]]);
-	right.appendChild(rightText);
-  }
-  console.log(masterData[index]);
-  var holder = document.getElementById("DetailTableHolder");
-  holder.style.display = "block";
+function loadDetails(subjectID, index){
+	var table = document.getElementById("DetailTable");
+	var keys = Object.keys(masterData[subjectID]);
+	for (let i = 0; i < keys.length; i++){
+		if (keys[i] != "children"){
+			var row = table.insertRow(i);
+			var left = row.insertCell();
+			var leftText = document.createTextNode(keys[i]);
+			left.appendChild(leftText);
+			var right = row.insertCell();
+			var rightText = document.createTextNode(masterData[subjectID][keys[i]]);
+			right.appendChild(rightText);
+		}
+	}
+	var offset = keys.length;
+	var childKeys = Object.keys(masterData[subjectID]["children"][index]);
+	for (let i = 0; i < childKeys.length; i++){
+		var row = table.insertRow(i+offset-1);
+		var left = row.insertCell();
+		var leftText = document.createTextNode(childKeys[i]);
+		left.appendChild(leftText);
+		var right = row.insertCell();
+		var rightText = document.createTextNode(masterData[subjectID]["children"][index][childKeys[i]]);
+		right.appendChild(rightText);
+	}
+	console.log(masterData[subjectID]);
+	var holder = document.getElementById("DetailTableHolder");
+	holder.style.display = "block";
 }
 
 function replaceText(str){
