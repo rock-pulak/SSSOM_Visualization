@@ -1,7 +1,7 @@
 var masterData;
 var rankTypes;
 var replacementStrings;
-const columns = ["Subject", "Details", "Object"];
+const columns = ["entry_number", "subject_id", "subject_label", "predicate_id", "object"];
 
 async function init(){
 	await getRanks();
@@ -108,14 +108,13 @@ async function getLines(fileText){
 	var row = header.insertRow(0);
 	for (let i = 0; i < columns.length; i++){
 		var cell = row.insertCell();
-		var tNode = document.createTextNode(columns[i]);
-		cell.appendChild(tNode);
+		cell.innerHTML = replaceText(columns[i]);
 	}
 	
 	var body = table.createTBody();
 	var cRow = 0;
 	for (let y = 0; y < idList.length; y++) {
-		createEntry(body, cRow, masterData[idList[y]]);
+		createEntry(body, cRow, y+1, masterData[idList[y]]);
 		cRow += masterData[idList[y]]["children"].length;
 	}
 }
@@ -147,9 +146,9 @@ function checkComment(line){
 	return line[0] != '#' && line.length != 0;
 }
 
-function createEntry(p, index, data){
+function createEntry(p, index, number, data){
     var row = p.insertRow(index);
-	createSubjectCell(row, data);
+	createSubjectCell(row, number, data);
 	for (var y = 0; y < data["children"].length; y++){
 		if (y > 0){
 			row = p.insertRow(y+index);
@@ -158,26 +157,24 @@ function createEntry(p, index, data){
 	}
 }
 
-function createSubjectCell(r, data){
-    var cell = r.insertCell();
-    var tText;
+function createSubjectCell(r, number, data){
+    var ncell = r.insertCell();
+	ncell.innerHTML = number;
 	if (data["children"].length > 1){
-		cell.setAttribute("rowspan", data["children"].length);
+		ncell.setAttribute("rowspan", data["children"].length);
 	}
-    if (data.hasOwnProperty("subject_label")){
-	    if (data.hasOwnProperty("subject_id")){
-	        cell.setAttribute("title", data["subject_id"]);
-	    }
-	    tText = data["subject_label"];
-    }
-    else if (data.hasOwnProperty("subject_id")) {
-	    tText = data["subject_id"];
-    }
-    else {
-	    tText = "Data not available";
-    }
-    var tNode = document.createTextNode(tText);
-    cell.appendChild(tNode);
+	
+    var idcell = r.insertCell();
+	idcell.innerHTML = data["subject_id"]
+	if (data["children"].length > 1){
+		idcell.setAttribute("rowspan", data["children"].length);
+	}
+	
+    var tcell = r.insertCell();
+    tcell.innerHTML = data["subject_label"]
+	if (data["children"].length > 1){
+		tcell.setAttribute("rowspan", data["children"].length);
+	}
 }
 
 function createObjectRow(r, i, data){
@@ -247,7 +244,6 @@ function loadDetails(subjectID, index){
 		var rightText = document.createTextNode(masterData[subjectID]["children"][index][childKeys[i]]);
 		right.appendChild(rightText);
 	}
-	console.log(masterData[subjectID]);
 	var holder = document.getElementById("DetailTableHolder");
 	holder.style.display = "block";
 }
