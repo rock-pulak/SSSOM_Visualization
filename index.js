@@ -180,9 +180,10 @@ function createSubjectCell(r, number, data){
 function createObjectRow(r, i, data){
 	var child = data["children"][i];
 	
+	r.setAttribute("onclick", "loadDetails(\"" + data["subject_id"] + "\", " + i + ")");
+	
     var predCell = r.insertCell();
 	var predText = replaceText(child["predicate_id"]);
-	predCell.setAttribute("onclick", "loadDetails(\"" + data["subject_id"] + "\", " + i + ")");
 	predCell.append(predText);
 	
 	var objCell = r.insertCell();
@@ -251,3 +252,4 @@ function loadDetails(subjectID, index){
 function replaceText(str){
 	return (str in replacementStrings) ? replacementStrings[str] : str;
 }
+
