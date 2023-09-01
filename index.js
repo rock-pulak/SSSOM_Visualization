@@ -86,16 +86,30 @@ async function getLines(fileText){
 	
 	for (let y = 0; y < idList.length; y++) {
 		masterData[idList[y]]["children"].sort(function(a,b){
+			var sA = getSourceName(a["object_id"]);
+			var sB = getSourceName(b["object_id"]);
+			if(sA != sB){
+				return sA > sB;
+			}
+			
 			var pA = a["predicate_id"];
 			var pB = b["predicate_id"];
-			if(pA in rankTypes && pB in rankTypes){
-				return rankTypes[pA] - rankTypes[pB]
+			if(pA != pB){
+				if(pA in rankTypes && pB in rankTypes){
+					return rankTypes[pA] - rankTypes[pB]
+				}
+				else if (pA in rankTypes){
+					return -1;
+				}
+				else if (pB in rankTypes){
+					return 1;
+				}
 			}
-			else if (pA in rankTypes){
-				return -1;
-			}
-			else if (pB in rankTypes){
-				return 1;
+			
+			var iA = getSourceID(a["object_id"]);
+			var iB = getSourceID(b["object_id"]);
+			if(iA != iB){
+				return iA > iB;
 			}
 			else return 0;
 		});
@@ -253,3 +267,9 @@ function replaceText(str){
 	return (str in replacementStrings) ? replacementStrings[str] : str;
 }
 
+function getSourceName(str){
+	return (str.includes(':')) ? str.split(':')[0] : str;
+}
+function getSourceID(str){
+	return (str.includes(':')) ? str.split(':')[1] : str;
+}
