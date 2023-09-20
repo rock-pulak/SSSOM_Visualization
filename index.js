@@ -1,7 +1,7 @@
 var masterData;
 var rankTypes;
 var replacementStrings;
-const columns = ["entry_number", "subject_id", "subject_label", "predicate_id", "object"];
+const columns = ["entry_number", "subject_id", "subject_label", "predicate_id", "object_id"];
 
 async function init(){
 	await getRanks();

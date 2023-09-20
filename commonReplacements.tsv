@@ -10,7 +10,7 @@ skos:exactMatch	Exact match
 skos:narrowMatch	Narrow match
 skos:broadMatch	Broad match
 entry_number	#
-subject_id	Source ID
-subject_label	Name
-predicate_id	Relation
-object	Object
+subject_id	Subject ID
+subject_label	Subject Label
+predicate_id	Predicate ID
+object_id	Object ID
