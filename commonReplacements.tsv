@@ -13,4 +13,5 @@ entry_number	#
 subject_id	Subject ID
 subject_label	Subject Label
 predicate_id	Predicate ID
+confidence	Confidence
 object_id	Object ID

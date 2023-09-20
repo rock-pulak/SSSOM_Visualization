@@ -1,7 +1,7 @@
 var masterData;
 var rankTypes;
 var replacementStrings;
-const columns = ["entry_number", "subject_id", "subject_label", "predicate_id", "object_id"];
+const columns = ["entry_number", "subject_id", "subject_label", "predicate_id", "confidence", "object_id"];
 
 async function init(){
 	await getRanks();
@@ -161,7 +161,7 @@ function checkComment(line){
 }
 
 function createEntry(p, index, number, data){
-    var row = p.insertRow(index);
+  var row = p.insertRow(index);
 	createSubjectCell(row, number, data);
 	for (var y = 0; y < data["children"].length; y++){
 		if (y > 0){
@@ -169,16 +169,19 @@ function createEntry(p, index, number, data){
 		}
 		createObjectRow(row, y, data);
 	}
+  if (data["children"].length == 0){
+    row.setAttribute("class", "subjectNoMatch");
+  }
 }
 
 function createSubjectCell(r, number, data){
-    var ncell = r.insertCell();
+  var ncell = r.insertCell();
 	ncell.innerHTML = number;
 	if (data["children"].length > 1){
 		ncell.setAttribute("rowspan", data["children"].length);
 	}
 	
-    var idcell = r.insertCell();
+  var idcell = r.insertCell();
 	idcell.innerHTML = data["subject_id"]
 	if (data["children"].length > 1){
 		idcell.setAttribute("rowspan", data["children"].length);
@@ -196,10 +199,14 @@ function createObjectRow(r, i, data){
 	
 	r.setAttribute("onclick", "loadDetails(\"" + data["subject_id"] + "\", " + i + ")");
 	
-    var predCell = r.insertCell();
+  var predCell = r.insertCell();
 	var predText = replaceText(child["predicate_id"]);
 	predCell.append(predText);
 	
+  var confCell = r.insertCell();
+	var confText = replaceText(child["confidence"]);
+	confCell.append(confText);
+  
 	var objCell = r.insertCell();
 	var objText;
     if (child.hasOwnProperty("object_label")){
@@ -264,7 +271,8 @@ function loadDetails(subjectID, index){
 }
 
 function replaceText(str){
-	return (str in replacementStrings) ? replacementStrings[str] : str;
+	return (str in replacementStrings) ? replacementStrings[str] :
+         (str != undefined) ? str : "";
 }
 
 function getSourceName(str){
