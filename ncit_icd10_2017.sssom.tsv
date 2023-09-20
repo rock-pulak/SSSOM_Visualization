@@ -774,7 +774,7 @@ NCI:C156722	skos:exactMatch	ICD10CM:C93.02	Acute monoblastic/monocytic leukemia,
 NCI:C156720	skos:exactMatch	ICD10CM:C92.A2	Acute myeloid leukemia with multilineage dysplasia, in relapse	Unspecified
 NCI:C156731	skos:exactMatch	ICD10CM:C94.22	Acute megakaryoblastic leukemia, in relapse	Unspecified
 NCI:C156717	skos:exactMatch	ICD10CM:C92.52	Acute myelomonocytic leukemia, in relapse	Unspecified
-NCI:C34377	skos:exactMatch	ICD10CM:D59	Acquired haemolytic anaemia	Unspecified
+NCI:C34377				Unspecified
 NCI:C35228	skos:relatedMatch	ICD10CM:P61.4	Other congenital anaemias, not elsewhere classified	Unspecified
 NCI:C4447	skos:exactMatch	ICD10CM:D20.0	Benign neoplasm: Retroperitoneum	Unspecified
 NCI:C6431	skos:relatedMatch	ICD10CM:C7B.00	Secondary carcinoid tumors, unspecified site	Unspecified
