@@ -26,7 +26,6 @@ async function getReplacementStrings(){
 	for (var i = 0; i < lines.length; i++){
 		replacementStrings[lines[i]["id"]] = lines[i]["replacement"];
 	}
-	//console.log("replacementStrings");
 }
 
 function recieveFile(e){
@@ -66,7 +65,7 @@ async function getLines(fileText){
 			else if (keys[i] == "subject_label"){
 				label = dataEntry[keys[i]];
 			}
-			else{
+			else { //if (dataEntry[keys[i]] != "")
 				entry[keys[i]] = dataEntry[keys[i]];
 			}
 		}
@@ -169,9 +168,6 @@ function createEntry(p, index, number, data){
 		}
 		createObjectRow(row, y, data);
 	}
-  if (data["children"].length == 0){
-    row.setAttribute("class", "subjectNoMatch");
-  }
 }
 
 function createSubjectCell(r, number, data){
@@ -199,29 +195,14 @@ function createObjectRow(r, i, data){
 	
 	r.setAttribute("onclick", "loadDetails(\"" + data["subject_id"] + "\", " + i + ")");
 	
-  var predCell = r.insertCell();
-	var predText = replaceText(child["predicate_id"]);
-	predCell.append(predText);
-	
-  var confCell = r.insertCell();
-	var confText = replaceText(child["confidence"]);
-	confCell.append(confText);
-  
-	var objCell = r.insertCell();
-	var objText;
-    if (child.hasOwnProperty("object_label")){
-	    if (child.hasOwnProperty("object_id")){
-	        cell.setAttribute("title", child["object_id"]);
-	    }
-	    tText = child["object_label"];
-    }
-    else if (child.hasOwnProperty("object_id")) {
-	    objText = child["object_id"];
-    }
-    else {
-	    objText = "Data not available";
-    }
-	objCell.append(objText);
+  createObjectCell(r, child["predicate_id"]);
+	createObjectCell(r, child["confidence"]);
+	createObjectCell(r, child["object_id"]);
+}
+
+function createObjectCell(r, data){
+  var newCell = r.insertCell();
+  newCell.innerHTML = replaceText(data);
 }
 
 function unloadFileMenu(){
